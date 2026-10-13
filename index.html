@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="PrivEx">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="description" content="Private browser with S25 Ultra price tracker">
+  <title>PrivEx</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+</head>
+<body>
+
+<div id="loading-overlay">
+  <div style="display:flex">
+    <div class="loader-dot"></div>
+    <div class="loader-dot"></div>
+    <div class="loader-dot"></div>
+  </div>
+</div>
+
+<div id="app">
+
+  <header id="header">
+    <div id="logo">Priv<span>Ex</span></div>
+    <button id="search-btn" aria-label="Open private search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- ── Tracker ── -->
+  <div id="tracker-view">
+    <div id="tracker-scroll">
+
+      <div class="tracker-hero">
+        <div class="product-name">Samsung Galaxy S25 Ultra · 12GB/256GB</div>
+        <div class="price-row">
+          <span class="currency-sup" id="currency-sym">₹</span>
+          <span class="current-price" id="current-price">—</span>
+          <span class="price-delta flat" id="price-delta">—</span>
+        </div>
+        <div class="last-updated">Updated <span id="last-updated">—</span></div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">30-day low</div>
+          <div class="stat-value accent" id="low-price">—</div>
+          <div class="stat-sub" id="low-date">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">vs low</div>
+          <div class="stat-value" id="vs-low">—</div>
+          <div class="stat-sub" id="vs-low-pct">above lowest</div>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <span class="chart-title">30-day price history</span>
+          <span class="chart-tag">DEMO DATA</span>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="price-chart"></canvas>
+        </div>
+      </div>
+
+      <div class="buy-section">
+        <div class="section-title">Check price at</div>
+        <div class="buy-links" id="buy-links"></div>
+      </div>
+
+      <div class="demo-notice">
+        ⚠ This tracker uses manually maintained demo data, not live market prices. Prices shown are not verified. Always confirm current pricing on the retailer's website.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Browser ── -->
+  <div id="browser-view">
+    <div id="browser-bar">
+      <button id="back-to-tracker">
+        <svg width="7" height="12" viewBox="0 0 7 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 1 1 6 6 11"/>
+        </svg>
+        Home
+      </button>
+      <div id="browser-input-wrap">
+        <input id="browser-input" type="search" placeholder="Search or enter address" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      </div>
+      <button id="browser-go" aria-label="Go">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </button>
+    </div>
+
+    <div id="browser-frame-wrap">
+      <div id="browser-placeholder">
+        <div class="placeholder-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </div>
+        <div class="placeholder-title">Private Search</div>
+        <div class="placeholder-sub">This session isn't saved. Websites may still log your visit on their own servers.</div>
+        <div class="quick-searches">
+          <button class="quick-chip" data-q="S25 Ultra price India">S25 Ultra price</button>
+          <button class="quick-chip" data-q="Samsung S25 Ultra review">Reviews</button>
+          <button class="quick-chip" data-q="Samsung S25 Ultra discount sale">Offers</button>
+        </div>
+      </div>
+      <iframe id="browser-frame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" referrerpolicy="no-referrer" loading="lazy"></iframe>
+    </div>
+
+    <div class="privacy-badge">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+      Session not stored · No browsing history · Sites retain their own data
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
